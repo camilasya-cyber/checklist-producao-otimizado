@@ -5,12 +5,19 @@ import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
+import ChecklistPo from "./pages/ChecklistPo";
+import ChecklistCapsula from "./pages/ChecklistCapsula";
+import ChecklistGel from "./pages/ChecklistGel";
 
 function Router() {
   // make sure to consider if you need authentication for certain routes
   return (
     <Switch>
       <Route path={"/"} component={Home} />
+      <Route path={"/novo"} component={Home} />
+      <Route path={"/checklist/po"} component={ChecklistPo} />
+      <Route path={"/checklist/capsula"} component={ChecklistCapsula} />
+      <Route path={"/checklist/gel"} component={ChecklistGel} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

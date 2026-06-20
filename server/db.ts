@@ -1,6 +1,6 @@
-import { eq } from "drizzle-orm";
+import { eq, desc } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users } from "../drizzle/schema";
+import { InsertUser, users, checklistRecords, preProductionData, mixingProcessData, packagingProcessData, postProductionData, responsiblePersonnel, evidencePhotos, InsertChecklistRecord, InsertPreProductionData, InsertMixingProcessData, InsertResponsiblePersonnel, InsertEvidencePhoto } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -89,4 +89,127 @@ export async function getUserByOpenId(openId: string) {
   return result.length > 0 ? result[0] : undefined;
 }
 
-// TODO: add feature queries here as your schema grows.
+// Checklist Records Functions
+export async function createChecklistRecord(data: InsertChecklistRecord) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const result = await db.insert(checklistRecords).values(data);
+  return result;
+}
+
+export async function getChecklistRecords(limit = 50, offset = 0) {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return await db
+    .select()
+    .from(checklistRecords)
+    .orderBy(desc(checklistRecords.createdAt))
+    .limit(limit)
+    .offset(offset);
+}
+
+export async function getChecklistRecordById(id: number) {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const result = await db
+    .select()
+    .from(checklistRecords)
+    .where(eq(checklistRecords.id, id))
+    .limit(1);
+  
+  return result.length > 0 ? result[0] : null;
+}
+
+export async function getChecklistRecordsByType(type: 'po' | 'capsula' | 'gel', limit = 50, offset = 0) {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return await db
+    .select()
+    .from(checklistRecords)
+    .where(eq(checklistRecords.type, type))
+    .orderBy(desc(checklistRecords.createdAt))
+    .limit(limit)
+    .offset(offset);
+}
+
+export async function createPreProductionData(data: InsertPreProductionData) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  return await db.insert(preProductionData).values(data);
+}
+
+export async function getPreProductionData(recordId: number) {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const result = await db
+    .select()
+    .from(preProductionData)
+    .where(eq(preProductionData.recordId, recordId))
+    .limit(1);
+  
+  return result.length > 0 ? result[0] : null;
+}
+
+export async function createMixingProcessData(data: InsertMixingProcessData) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  return await db.insert(mixingProcessData).values(data);
+}
+
+export async function getMixingProcessData(recordId: number) {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const result = await db
+    .select()
+    .from(mixingProcessData)
+    .where(eq(mixingProcessData.recordId, recordId))
+    .limit(1);
+  
+  return result.length > 0 ? result[0] : null;
+}
+
+export async function createResponsiblePersonnel(data: InsertResponsiblePersonnel) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  return await db.insert(responsiblePersonnel).values(data);
+}
+
+export async function getResponsiblePersonnel(recordId: number) {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const result = await db
+    .select()
+    .from(responsiblePersonnel)
+    .where(eq(responsiblePersonnel.recordId, recordId))
+    .limit(1);
+  
+  return result.length > 0 ? result[0] : null;
+}
+
+export async function createEvidencePhoto(data: InsertEvidencePhoto) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  return await db.insert(evidencePhotos).values(data);
+}
+
+export async function getEvidencePhotos(recordId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return await db
+    .select()
+    .from(evidencePhotos)
+    .where(eq(evidencePhotos.recordId, recordId))
+    .orderBy(desc(evidencePhotos.uploadedAt));
+}
