@@ -1,4 +1,4 @@
-import { eq, desc } from "drizzle-orm";
+import { eq, desc, or, like } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import { InsertUser, users, checklistRecords, preProductionData, mixingProcessData, packagingProcessData, postProductionData, responsiblePersonnel, evidencePhotos, InsertChecklistRecord, InsertPreProductionData, InsertMixingProcessData, InsertResponsiblePersonnel, InsertEvidencePhoto } from "../drizzle/schema";
 import { ENV } from './_core/env';
@@ -95,7 +95,12 @@ export async function createChecklistRecord(data: InsertChecklistRecord) {
   if (!db) throw new Error("Database not available");
   
   const result = await db.insert(checklistRecords).values(data);
-  return result;
+  // Retornar o ID do registro inserido
+  const insertResult = result as any;
+  return {
+    insertId: insertResult.insertId || insertResult[0]?.insertId,
+    lastInsertRowid: insertResult.lastInsertRowid,
+  };
 }
 
 export async function getChecklistRecords(limit = 50, offset = 0) {
@@ -212,4 +217,25 @@ export async function getEvidencePhotos(recordId: number) {
     .from(evidencePhotos)
     .where(eq(evidencePhotos.recordId, recordId))
     .orderBy(desc(evidencePhotos.uploadedAt));
+}
+
+export async function searchChecklistRecords(query: string, limit = 50, offset = 0) {
+  const db = await getDb();
+  if (!db) return [];
+  
+  const searchTerm = `%${query}%`;
+  
+  return await db
+    .select()
+    .from(checklistRecords)
+    .where(
+      or(
+        like(checklistRecords.productName, searchTerm),
+        like(checklistRecords.client, searchTerm),
+        like(checklistRecords.formulationCode, searchTerm)
+      )
+    )
+    .limit(limit)
+    .offset(offset)
+    .orderBy(desc(checklistRecords.createdAt));
 }

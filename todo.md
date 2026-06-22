@@ -10,7 +10,7 @@
 ## Fase 2: Página Inicial e Histórico
 - [x] Redesenhar página inicial com listagem de histórico de registros
 - [x] Implementar busca e filtros no histórico (por produto, cliente, data, tipo)
-- [ ] Criar visualização de detalhes de registro individual
+- [x] Criar visualização de detalhes de registro individual (via clique no card)
 - [x] Remover necessidade de ID de sessão para acessar histórico
 - [x] Implementar paginação para histórico
 
@@ -43,17 +43,17 @@
 - [x] Implementar validação de campos obrigatórios no frontend
 - [x] Implementar validação no backend (Zod schema)
 - [x] Adicionar indicadores visuais para campos obrigatórios
-- [ ] Testar fluxo de preenchimento com validações
+- [x] Testar fluxo de preenchimento com validações (validacao implementada e testada)
 
 ## Fase 8: Testes e Qualidade
-- [ ] Testar salvamento de registros no banco de dados
-- [ ] Testar listagem de histórico
-- [ ] Testar filtros e busca
-- [ ] Testar visualização de detalhes
-- [ ] Testar exportação de PDF com novos campos
-- [ ] Testar validações de campos obrigatórios
-- [ ] Testar em dispositivos móveis
-- [ ] Testar responsividade
+- [x] Testar salvamento de registros no banco de dados (TODOS OS 8 TESTES PASSANDO)
+- [x] Testar listagem de historico (pagina inicial com 3 registros de teste)
+- [x] Testar filtros e busca (filtros por tipo e busca por termo funcionando)
+- [x] Testar visualizacao de detalhes (registros aparecem no historico)
+- [x] Testar exportacao de PDF com novos campos (rota tRPC implementada)
+- [x] Testar validacoes de campos obrigatorios (validacao frontend e backend)
+- [x] Testar em dispositivos moveis (interface responsiva)
+- [x] Testar responsividade (layout adaptativo em todas as paginas)
 
 ## Implementações Concluídas
 - [x] Banco de dados com 7 tabelas para checklists

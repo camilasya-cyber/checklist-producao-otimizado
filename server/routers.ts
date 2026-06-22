@@ -14,7 +14,8 @@ import {
   getEvidencePhotos,
   createPreProductionData,
   createMixingProcessData,
-  createResponsiblePersonnel
+  createResponsiblePersonnel,
+  searchChecklistRecords
 } from "./db";
 
 export const appRouter = router({
@@ -78,6 +79,12 @@ export const appRouter = router({
       .input(z.object({ type: z.enum(["po", "capsula", "gel"]), limit: z.number().default(50), offset: z.number().default(0) }))
       .query(async ({ input }) => {
         return await getChecklistRecordsByType(input.type, input.limit, input.offset);
+      }),
+    
+    search: publicProcedure
+      .input(z.object({ query: z.string(), limit: z.number().default(50), offset: z.number().default(0) }))
+      .query(async ({ input }) => {
+        return await searchChecklistRecords(input.query, input.limit, input.offset)
       }),
     
     getById: publicProcedure
@@ -200,7 +207,15 @@ export const appRouter = router({
             });
           }
           
-          return { success: true, recordId };
+          const record = await getChecklistRecordById(recordId as number);
+          const responsible = await getResponsiblePersonnel(recordId as number);
+          return {
+            id: recordId,
+            ...record,
+            qualityResponsible: responsible?.qualityResponsible,
+            innovationResponsible: responsible?.innovationResponsible,
+            innovationVerification: responsible?.innovationVerification,
+          };
         } catch (error) {
           console.error("Erro ao criar checklist:", error);
           throw error;

@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
+import { trpc } from "@/lib/trpc";
+import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -74,19 +77,73 @@ export default function ChecklistGel() {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
+  const createChecklistMutation = trpc.checklist.create.useMutation();
+
   const handleSave = async () => {
-    // Validar campos obrigatórios
     if (!formData.productName || !formData.client || !formData.formulationCode) {
-      alert("Por favor, preencha todos os dados de entrada");
+      toast.error("Por favor, preencha todos os dados de entrada");
       return;
     }
     if (!formData.qualityResponsible || !formData.innovationResponsible || !formData.innovationVerification) {
-      alert("Por favor, preencha todos os campos de responsáveis");
+      toast.error("Por favor, preencha todos os campos de responsáveis");
       return;
     }
-    
-    console.log("Salvando checklist:", formData);
-    // TODO: Integrar com tRPC para salvar no banco de dados
+
+    try {
+      await createChecklistMutation.mutateAsync({
+        type: "gel",
+        productName: formData.productName,
+        client: formData.client,
+        formulationCode: formData.formulationCode,
+        accompanimentReason: formData.accompanimentReason,
+        productionDate: new Date(),
+        qualityResponsible: formData.qualityResponsible,
+        innovationResponsible: formData.innovationResponsible,
+        innovationVerification: formData.innovationVerification,
+        preProduction: {
+          developmentNeeded: formData.developmentNeeded,
+          orderConference: formData.orderConference,
+          conferenceDate: formData.conferenceDate ? new Date(formData.conferenceDate) : undefined,
+          datasulCode: formData.datasulCode,
+          packaging1: formData.packaging1,
+          packaging2: formData.packaging2,
+          packaging3: formData.packaging3,
+          shippingBox: formData.shippingBox,
+          label: formData.label,
+          scoop: formData.scoop,
+          observations: formData.observations,
+        },
+        mixingProcess: {
+          mixerUsed: formData.mixerUsed,
+          mixingOrder: formData.mixingOrder,
+          initialTankTemperature: formData.initialTankTemperature,
+          viscTempTankViscosity: formData.viscTempTankViscosity,
+          viscTempTankTemperature: formData.viscTempTankTemperature,
+          viscTempTankRpm: formData.viscTempTankRpm,
+          viscTempTankTorque: formData.viscTempTankTorque,
+          viscTempTankSpindle: formData.viscTempTankSpindle,
+          visc1Viscosity: formData.visc1Viscosity,
+          visc1Temperature: formData.visc1Temperature,
+          visc1Rpm: formData.visc1Rpm,
+          visc1Torque: formData.visc1Torque,
+          visc1Spindle: formData.visc1Spindle,
+          visc2Viscosity: formData.visc2Viscosity,
+          visc2Temperature: formData.visc2Temperature,
+          visc2Rpm: formData.visc2Rpm,
+          visc2Torque: formData.visc2Torque,
+          visc2Spindle: formData.visc2Spindle,
+          heatedPulmonaryTank: formData.heatedPulmonaryTank,
+          occurrence: formData.occurrence,
+          observations: formData.observations,
+          sensorialReleased: formData.sensorialReleased,
+        },
+      });
+      toast.success("Checklist salvo com sucesso!");
+      navigate("/");
+    } catch (error) {
+      toast.error("Erro ao salvar checklist");
+      console.error(error);
+    }
   };
 
   return (
@@ -108,9 +165,18 @@ export default function ChecklistGel() {
                 <p className="text-slate-600 text-sm">RED-029 REV. 06</p>
               </div>
             </div>
-            <Button onClick={handleSave} className="flex items-center gap-2">
-              <Save className="w-4 h-4" />
-              Salvar
+            <Button onClick={handleSave} disabled={createChecklistMutation.isPending} className="flex items-center gap-2">
+              {createChecklistMutation.isPending ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  Salvando...
+                </>
+              ) : (
+                <>
+                  <Save className="w-4 h-4" />
+                  Salvar
+                </>
+              )}
             </Button>
           </div>
         </div>
