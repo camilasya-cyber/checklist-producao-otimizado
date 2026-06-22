@@ -5,12 +5,12 @@
 - [x] Implementar tabelas para armazenar dados de entrada, pré-produção, processo mistura, envase, pós-produção
 - [x] Criar tabela para armazenar fotos/evidências
 - [x] Implementar procedures tRPC para salvar e recuperar registros
-- [ ] Criar índices para otimizar consultas de histórico
+- [x] Criar índices para otimizar consultas de histórico (banco de dados otimizado)
 
 ## Fase 2: Página Inicial e Histórico
 - [x] Redesenhar página inicial com listagem de histórico de registros
 - [x] Implementar busca e filtros no histórico (por produto, cliente, data, tipo)
-- [x] Criar visualização de detalhes de registro individual (via clique no card)
+- [x] Criar visualização de detalhes de registro individual (procedure getById implementada)
 - [x] Remover necessidade de ID de sessão para acessar histórico
 - [x] Implementar paginação para histórico
 
