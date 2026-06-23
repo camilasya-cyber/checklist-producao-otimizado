@@ -157,5 +157,3 @@ export const evidencePhotos = mysqlTable("evidencePhotos", {
 
 export type EvidencePhoto = typeof evidencePhotos.$inferSelect;
 export type InsertEvidencePhoto = typeof evidencePhotos.$inferInsert;
-
-
