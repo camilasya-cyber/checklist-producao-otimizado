@@ -15,6 +15,13 @@
       "when": 1781888551455,
       "tag": "0001_curly_exiles",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1782244434350,
+      "tag": "0002_boring_skullbuster",
+      "breakpoints": true
     }
   ]
 }

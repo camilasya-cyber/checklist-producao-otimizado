@@ -22,6 +22,7 @@ export default function ChecklistCapsula() {
     accompanimentReason: "",
     
     // Responsáveis (Obrigatórios)
+    productionResponsible: "",
     qualityResponsible: "",
     innovationResponsible: "",
     innovationVerification: "",
@@ -61,7 +62,7 @@ export default function ChecklistCapsula() {
       toast.error("Por favor, preencha todos os dados de entrada");
       return;
     }
-    if (!formData.qualityResponsible || !formData.innovationResponsible || !formData.innovationVerification) {
+    if (!formData.productionResponsible || !formData.qualityResponsible || !formData.innovationResponsible || !formData.innovationVerification) {
       toast.error("Por favor, preencha todos os campos de responsáveis");
       return;
     }
@@ -73,6 +74,7 @@ export default function ChecklistCapsula() {
         client: formData.client,
         formulationCode: formData.formulationCode,
         accompanimentReason: formData.accompanimentReason,
+        productionResponsible: formData.productionResponsible,
         productionDate: new Date(),
         qualityResponsible: formData.qualityResponsible,
         innovationResponsible: formData.innovationResponsible,
@@ -224,6 +226,16 @@ export default function ChecklistCapsula() {
                 <CardDescription>Campos obrigatórios - Responsáveis pela qualidade e inovação</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
+                <div>
+                  <Label htmlFor="productionResponsible">Responsável Produção *</Label>
+                  <Input
+                    id="productionResponsible"
+                    value={formData.productionResponsible}
+                    onChange={(e) => handleInputChange("productionResponsible", e.target.value)}
+                    placeholder="Nome do responsável"
+                    required
+                  />
+                </div>
                 <div>
                   <Label htmlFor="qualityResponsible">Responsável Qualidade *</Label>
                   <Input

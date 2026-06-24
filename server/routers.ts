@@ -115,6 +115,7 @@ export const appRouter = router({
         formulationCode: z.string().min(1, "Código da formulação é obrigatório"),
         accompanimentReason: z.string().optional(),
         productionDate: z.date().default(() => new Date()),
+        productionResponsible: z.string().min(1, "Responsável Produção é obrigatório"),
         qualityResponsible: z.string().min(1, "Responsável Qualidade é obrigatório"),
         innovationResponsible: z.string().min(1, "Responsável Inovação é obrigatório"),
         innovationVerification: z.string().min(1, "Verificação Inovação é obrigatória"),
@@ -201,6 +202,7 @@ export const appRouter = router({
             // Salvar dados de responsáveis
             await createResponsiblePersonnel({
               recordId: recordId as number,
+              productionResponsible: input.productionResponsible,
               qualityResponsible: input.qualityResponsible,
               innovationResponsible: input.innovationResponsible,
               innovationVerification: input.innovationVerification,
@@ -212,6 +214,7 @@ export const appRouter = router({
           return {
             id: recordId,
             ...record,
+            productionResponsible: responsible?.productionResponsible,
             qualityResponsible: responsible?.qualityResponsible,
             innovationResponsible: responsible?.innovationResponsible,
             innovationVerification: responsible?.innovationVerification,

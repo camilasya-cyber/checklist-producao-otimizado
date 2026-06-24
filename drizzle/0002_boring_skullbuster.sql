@@ -1,0 +1,1 @@
+ALTER TABLE `responsiblePersonnel` ADD `productionResponsible` varchar(255) NOT NULL;

@@ -137,6 +137,7 @@ export type InsertPostProductionData = typeof postProductionData.$inferInsert;
 export const responsiblePersonnel = mysqlTable("responsiblePersonnel", {
   id: int("id").autoincrement().primaryKey(),
   recordId: int("recordId").notNull(),
+  productionResponsible: varchar("productionResponsible", { length: 255 }).notNull(),
   qualityResponsible: varchar("qualityResponsible", { length: 255 }).notNull(),
   innovationResponsible: varchar("innovationResponsible", { length: 255 }).notNull(),
   innovationVerification: varchar("innovationVerification", { length: 255 }).notNull(),
@@ -157,3 +158,5 @@ export const evidencePhotos = mysqlTable("evidencePhotos", {
 
 export type EvidencePhoto = typeof evidencePhotos.$inferSelect;
 export type InsertEvidencePhoto = typeof evidencePhotos.$inferInsert;
+
+
